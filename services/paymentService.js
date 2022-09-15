@@ -7,12 +7,12 @@ const Account_statement = async (value) => {
         user_id: value
     })
 
-    if(!Account){
+    if (!Account) {
         throw new AppError('This user have no history', 401)
     }
     return Account
 }
 
-module.exports ={
+module.exports = {
     Account_statement
 }

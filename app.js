@@ -13,8 +13,8 @@ console.log(process.env.NODE_ENV)
 app.use('/v1/lend', userRouter)
 app.use('/v1/lend', paymentRouter)
 
-app.all('*', (req,res,next) => {
-    next(new AppError(`Can't find ${req.originalUrl} on this server`,400))
+app.all('*', (req, res, next) => {
+    next(new AppError(`Can't find ${req.originalUrl} on this server`, 400))
 })
 
 app.use(errorController)
