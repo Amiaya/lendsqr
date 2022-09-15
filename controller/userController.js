@@ -1,8 +1,8 @@
 const AppError = require('../utils/appError')
-const {User} = require('../models')
-const {Payment} = require('../models')
-const {deposit, withdrawal, transfer,GetAllUser} = require('../services/userService')
+const db = require('../config/database')
+const {deposit, withdrawal, transfer,GetAllUser,deleteAllUser} = require('../services/userService')
 const {bankPin} = require('../services/pinService')
+
 
 
 exports.getUser = async(req,res,next) => {
@@ -67,9 +67,7 @@ exports.withdraw = async (req,res,next) => {
 exports.transfer =  async(req,res,next) => {
     try {
         const accountNo = req.body.acct_no
-        const otherUser = await User.findOne({
-            where: {Account_No: accountNo}
-        })
+        const otherUser = await db.select().from('users').where({ account_no: accountNo})
         // console.log(otherUser)
         const user = await transfer(req.user,otherUser,req.body.amount,req.body.pin)
     
@@ -94,6 +92,18 @@ exports.AllUser = async(req,res,next) => {
                 users
             }
         }) 
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.deleteUser = async (req,res,next) => {
+    try {
+        await deleteAllUser()
+        res.status(204).json({
+            status: "successful",
+            message: "All users have been deleted"
+        })
     } catch (error) {
         next(error)
     }
